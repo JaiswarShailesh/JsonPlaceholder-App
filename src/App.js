@@ -8,10 +8,13 @@ import Albums from "./components/albums";
 import Comments from "./components/comments";
 import Photos from "./components/photos";
 import Todos from "./components/todos";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
     <>
+      <ToastContainer />
       <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />

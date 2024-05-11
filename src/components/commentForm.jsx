@@ -1,64 +1,18 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
 const CommentForm = ({
-  open,
-  close,
   show,
-  postId,
-  addComment,
-  editComment,
-  showEditComment,
+  close,
+  name,
+  email,
+  comment,
+
+  handleNameInput,
+  handleEmailInput,
+  handleCommentInput,
+  handleSubmit,
 }) => {
-  const [name, setName] = useState(editComment ? editComment.name : "");
-  const [email, setEmail] = useState(editComment ? editComment.email : "");
-  const [comment, setComment] = useState(editComment ? editComment.body : "");
-
-  const handleNameInput = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailInput = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleCommentInput = (e) => {
-    setComment(e.target.value);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      if (editComment) {
-        const response = await axios.put(
-          `https://jsonplaceholder.typicode.com/comments/${editComment.id}`,
-          {
-            name,
-            email,
-            body: comment,
-          }
-        );
-        showEditComment(response.data);
-        console.log(response);
-      } else {
-        const response = await axios.post(
-          "https://jsonplaceholder.typicode.com/comments",
-          {
-            postId,
-            name,
-            email,
-            body: comment,
-          }
-        );
-        close();
-        console.log(response);
-        addComment(response.data);
-      }
-    } catch (error) {
-      console.log(`You have an error ${error}`);
-    }
-  };
-
   return (
     <Modal show={show} onHide={close}>
       <Modal.Header closeButton>
@@ -91,6 +45,7 @@ const CommentForm = ({
               as="textarea"
               rows={3}
               onChange={(e) => handleCommentInput(e)}
+              value={comment}
             />
           </Form.Group>
         </Form>

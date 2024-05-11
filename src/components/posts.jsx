@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 const Posts = () => {

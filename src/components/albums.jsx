@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import "holderjs";
-import PhotoModal from "./photoModal";
 
 const Albums = () => {
   const { id: userId } = useParams();

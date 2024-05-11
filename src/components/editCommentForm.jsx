@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-const EditCommentForm = ({ open, close, show, postId, addComment }) => {
+const EditCommentForm = ({ close, show, postId, addComment }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");

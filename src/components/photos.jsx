@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import PhotoModal from "./photoModal";
 
@@ -48,11 +48,7 @@ const Photos = () => {
           ))}
         </Row>
       </Container>
-      <PhotoModal
-        show={show}
-        handleClose={handleClose}
-        photo={currentPhoto}
-      />
+      <PhotoModal show={show} handleClose={handleClose} photo={currentPhoto} />
     </>
   );
 };

@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import CommentForm from "./commentForm";
+import { toast } from "react-toastify";
 
 const Comments = () => {
   const { id: postId } = useParams();
@@ -12,6 +13,10 @@ const Comments = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [comment, setComment] = useState("");
 
   const getComments = async () => {
     const { data } = await axios.get(
@@ -30,7 +35,7 @@ const Comments = () => {
     try {
       const updatedComments = [...comments];
       const newComments = updatedComments.filter(
-        (comment) => comment.id != commentId
+        (comment) => comment.id !== commentId
       );
       setComments(newComments);
 
@@ -38,9 +43,15 @@ const Comments = () => {
         `https://jsonplaceholder.typicode.com/comments/${commentId}`
       );
 
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Deleted successfully!");
+      } else {
+        throw new Error("Failed to add comment");
+      }
       console.log(response);
     } catch (error) {
       console.log(`You have an error ${error}`);
+      toast.error("Failed to delete comment");
     }
   };
 
@@ -59,10 +70,85 @@ const Comments = () => {
   };
 
   const handleEdit = (commentId) => {
+    console.log(commentId);
     const commentToEdit = comments.find((comment) => comment.id === commentId);
+    setName(commentToEdit.name);
+    setEmail(commentToEdit.email);
+    setComment(commentToEdit.body);
     console.log(commentToEdit);
     setEditComment(commentToEdit);
     handleShow();
+  };
+
+  const handleNameInput = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailInput = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleCommentInput = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (editComment) {
+        const response = await axios.put(
+          `https://jsonplaceholder.typicode.com/comments/${editComment.id}`,
+          {
+            name,
+            email,
+            body: comment,
+          }
+        );
+        showEditComment(response.data);
+        setEditComment(null);
+        if (response.status >= 200 && response.status < 300) {
+          toast.success("Edited successfully!");
+        } else {
+          throw new Error("Failed to add comment");
+        }
+        console.log(response);
+      } else {
+        const response = await axios.post(
+          "https://jsonplaceholder.typicode.com/comments",
+          {
+            postId,
+            name,
+            email,
+            body: comment,
+          }
+        );
+        console.log(response);
+        if (response.status >= 200 && response.status < 300) {
+          toast.success("Added successfully!");
+        } else {
+          throw new Error("Failed to add comment");
+        }
+        clearAllInputs();
+        handleClose();
+        console.log(response);
+        addComment(response.data);
+      }
+    } catch (error) {
+      console.log(`You have an error ${error.message}`);
+      toast.error("Failed to add comment");
+      handleClose();
+      clearAllInputs();
+    }
+  };
+
+  const clearAllInputs = () => {
+    setName("");
+    setEmail("");
+    setComment("");
+  };
+
+  const handleNewCommentClick = () => {
+    handleShow();
+    clearAllInputs();
   };
 
   return (
@@ -103,18 +189,20 @@ const Comments = () => {
             </ListGroup>
           </Col>
         </Row>
-        <Button variant="primary my-3" onClick={handleShow}>
+        <Button variant="primary my-3" onClick={handleNewCommentClick}>
           Add new comment
         </Button>
       </Container>
       <CommentForm
         show={show}
         close={handleClose}
-        open={handleShow}
-        postId={postId}
-        addComment={addComment}
-        editComment={editComment}
-        showEditComment={showEditComment}
+        name={name}
+        email={email}
+        comment={comment}
+        handleNameInput={handleNameInput}
+        handleEmailInput={handleEmailInput}
+        handleCommentInput={handleCommentInput}
+        handleSubmit={handleSubmit}
       />
     </>
   );

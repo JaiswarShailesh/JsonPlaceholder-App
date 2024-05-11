@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationBar from "./navigationBar";
 import Dashboard from "./dashboard";
 import { Col, Container, Row } from "react-bootstrap";
 
@@ -8,7 +7,7 @@ const Home = () => {
     <>
       <Container>
         <Row>
-          <Col className="mt-5">
+          <Col className="mt-5 overflow-x-auto">
             <Dashboard />
           </Col>
         </Row>
